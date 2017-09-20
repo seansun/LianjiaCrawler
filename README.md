@@ -5,5 +5,7 @@ python 爬上海链家二手房数据
 # 功能
   根据区域 板块 爬取二手房挂牌,二手房成交数据
   
-  eg.
+
+  ![Image text](https://github.com/seansun/LianjiaCrawler/blob/master/img/lianjia.png)
+  
   

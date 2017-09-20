@@ -1,0 +1,141 @@
+{% include "base.html" %}
+
+<h1>{{ xiaoqu_name }} 小区二手房源 共 {{ size }} 条记录</h1>
+
+<table border="1">
+    <thead>
+
+    <th>id</th>
+    <th>fang_key</th>
+    <th>fang_desc</th>
+    <th>huxing</th>
+    <th>mianji</th>
+    <th>louceng</th>
+    <th>chaoxiang</th>
+    <th>price</th>
+    <th>price_pre</th>
+    <th>fang_url</th>
+    <th>xiaoqu_key</th>
+    <th>xiaoqu_name</th>
+    <th>region</th>
+    <th>subregion</th>
+    <th>built_time</th>
+    <th>subway_info</th>
+    <th>haskey</th>
+    <th>property_years</th>
+    <th>is_new</th>
+    <th>created_date</th>
+
+    </thead>
+    <tbody>
+    {% for line in data %}
+        <tr>
+            <td>{{line.id}}</td>
+            <td>{{line.fang_key}}</td>
+            <td>{{line.fang_desc}}</td>
+             <td>{{line.huxing}}</td>
+             <td>{{line.mianji}}</td>
+             <td>{{line.louceng}}</td>
+             <td>{{line.chaoxiang}}</td>
+             <td>{{line.price}}</td>
+             <td>{{line.price_pre}}</td>
+            <td><a href={{line.fang_url}}>{{line.fang_url}}</a></td>
+             <td>{{line.xiaoqu_key}}</td>
+             <td>{{line.xiaoqu_name}}</td>
+             <td>{{line.region}}</td>
+             <td>{{line.subregion}}</td>
+             <td>{{line.built_time}}</td>
+             <td>{{line.subway_info}}</td>
+             <td>{{line.haskey}}</td>
+             <td>{{line.property_years}}</td>
+             <td>{{line.is_new}}</td>
+             <td>{{line.created_date}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div id="main" style="height:200px"></div>
+
+    <script type="text/javascript">
+
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line', // 使用柱状图就加载bar模块，按需加载
+                'echarts/chart/bar'
+
+            ],
+
+           function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main'));
+
+                option = {
+
+                    title : {
+                        text: '二手房挂牌价趋势图'
+
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['挂牌价']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : {{ report_name |safe}},
+                            axisLabel : {
+                                formatter: '爬虫时间{value} '
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                               axisLabel : {
+                                formatter: '{value} 万'
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'挂牌价',
+                            type:'line',
+                            data:{{ report_price|safe }}
+                        }
+
+                    ]
+                };
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+
+            }
+        );
+
+    </script>
+</body>
+</html>

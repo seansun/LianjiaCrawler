@@ -1,0 +1,84 @@
+{% include "base.html" %}
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+  $("#submit").click(function(){
+
+    $.get("/refresh/",function(data,status){
+
+        if ( confirm(data + "\n确定要重新爬取数据吗？")) {
+
+          $("#submit").attr("disabled", true);
+          $("#loadDiv").show();
+
+          $.post("/refresh/",function(data,status){
+
+                  $("#loadDiv").hide();
+                  alert(data);
+                  $("#submit").attr("disabled", false);
+
+            });
+        }
+
+    });
+  });
+
+
+       $.get("/onload/",function(data,status){
+
+                 //alert( data);
+                 $("#info").text(data);
+
+            });
+
+});
+
+
+
+</script>
+
+ <div id="loadDiv"  style="display:none;text-align:center;height:100px">
+        <img src="/static/imgs/timg.gif" style="background:#fff;"/>
+ </div>
+
+<h1>爬虫链家数据</h1>
+ <div  style="text-align:left;height:50px">
+
+     <p id="info" style="color:#00F"></p>
+
+    爬虫链家数据:<input type="submit" id="submit" value="开始爬虫">
+
+ </div>
+
+<h1>根据小区查成交</h1>
+
+    <form action="/chenjiao/" method="post">
+
+        小区名称:<input type="text" name="xiaoqu_name">
+        <input type="submit" value="查询">
+
+    </form>
+<h1>根据小区查小区信息</h1>
+    <form action="/xiaoqu/" method="post">
+        小区名称:<input type="text" name="xiaoqu_name">
+        <input type="submit" value="查询">
+    </form>
+<h1>根据小区查小区房源信息</h1>
+    <form action="/fanglist/" method="post">
+        小区名称:<input type="text" name="xiaoqu_name">
+        <input type="submit" value="查询">
+    </form>
+
+<h1>根据房源编号查询房源历史挂牌信息</h1>
+
+    <form action="/fanginfo/" method="post">
+        二手房源编号:<input type="text" name="fang_key">
+        <input type="submit" value="查询">
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+{% include "base.html" %}
+<h1>小区二手房展示</h1>
+
+<table border="1">
+    <thead>
+
+    <th>id</th>
+    <th>xiaoqu_key</th>
+    <th>xiaoqu_name</th>
+    <th>xiaoqu_url</th>
+    <th>region</th>
+    <th>subregion</th>
+    <th>price</th>
+    <th>built_time</th>
+    <th>subway_info</th>
+    <th>onsale_num</th>
+    <th>xiaoqu_fanglist_url</th>
+    <th>created_date</th>
+
+    </thead>
+    <tbody>
+    {% for line in data %}
+        <tr>
+            <td>{{line.id}}</td>
+            <td>{{line.xiaoqu_key}}</td>
+            <td>{{line.xiaoqu_name}}</td>
+            <td><a href={{line.xiaoqu_url}}>{{line.xiaoqu_url}}</a></td>
+             <td>{{line.region}}</td>
+             <td>{{line.subregion}}</td>
+             <td>{{line.price}}</td>
+             <td>{{line.built_time}}</td>
+             <td>{{line.subway_info}}</td>
+             <td>{{line.onsale_num}}</td>
+            <td><a href={{line.xiaoqu_fanglist_url}}>{{line.xiaoqu_fanglist_url}}</a></td>
+             <td>{{line.created_date}}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+ <div id="main" style="height:200px"></div>
+ <div id="main2" style="height:200px"></div>
+
+
+    <script type="text/javascript">
+
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line', // 使用柱状图就加载bar模块，按需加载
+                'echarts/chart/bar'
+
+            ],
+
+           function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main'));
+
+                option = {
+
+                    title : {
+                        text: '小区挂牌在售的二手房数量趋势'
+
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['挂牌数量']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : {{ report_name|safe}},
+                            axisLabel : {
+                                formatter: '爬虫时间{value} '
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                               axisLabel : {
+                                formatter: '{value} 套'
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'挂牌数量',
+                            type:'line',
+                            data:{{ report_data|safe }}
+                        }
+
+                    ]
+                };
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+
+            }
+        );
+
+
+
+        // 使用
+        require(
+            [
+                'echarts',
+                'echarts/chart/line', // 使用柱状图就加载bar模块，按需加载
+                'echarts/chart/bar'
+
+            ],
+
+           function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main2'));
+
+                option = {
+
+                    title : {
+                        text: '小区挂牌在售的二手房均价趋势'
+
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:['均价']
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : {{ report_name|safe}},
+                             axisLabel : {
+                                formatter: '爬虫时间{value} '
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                               axisLabel : {
+                                formatter: '{value} 元/平'
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'均价',
+                            type:'line',
+                            data:{{ report_price|safe }}
+                        }
+
+                    ]
+                };
+
+                // 为echarts对象加载数据
+                myChart.setOption(option);
+
+            }
+        );
+
+
+
+
+    </script>
+
+
+</body>
+</html>
